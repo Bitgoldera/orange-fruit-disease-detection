@@ -1,0 +1,33 @@
+
+# Orange project: local data and experimental artifacts
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+
+# Large datasets and extracted images
+data/
+*.zip
+*.rar
+
+# Experimental checkpoints and generated reports
+models/pilot500/
+models/melanose100/
+models/*_stage1.keras
+models/*_best.keras
+models/*_best_finetuned.keras
+models/augrobust/efficientnet_b0_stage1.keras
+models/augrobust/efficientnet_b0_best.keras
+models/augrobust/efficientnet_b0_best_finetuned.keras
+reports/
+archive/
+*.log
+.pytest_cache/
+
+# Local backup copies
+*.bak
+app_before_gradcam.py

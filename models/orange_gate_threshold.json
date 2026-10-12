@@ -1,0 +1,22 @@
+{
+  "class_names": [
+    "Not_Orange",
+    "Orange"
+  ],
+  "orange_class_index": 1,
+  "threshold": 0.2689982056617737,
+  "selection_method": "maximum recall with validation precision >= 0.95",
+  "validation_metrics_at_threshold": {
+    "threshold": 0.2689982056617737,
+    "accuracy": 0.9813084112149533,
+    "precision": 0.9658119658119658,
+    "recall": 1.0,
+    "specificity": 0.9603960396039604,
+    "f1": 0.9826086956521739,
+    "true_positive": 113,
+    "true_negative": 97,
+    "false_positive": 4,
+    "false_negative": 0,
+    "total": 214
+  }
+}
