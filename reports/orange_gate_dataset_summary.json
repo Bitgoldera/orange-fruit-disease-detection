@@ -1,0 +1,23 @@
+{
+  "class_names": [
+    "Not_Orange",
+    "Orange"
+  ],
+  "counts": {
+    "train": {
+      "Orange": 677,
+      "Not_Orange": 1054
+    },
+    "val": {
+      "Orange": 113,
+      "Not_Orange": 101
+    },
+    "test": {
+      "Orange": 108,
+      "Not_Orange": 52
+    }
+  },
+  "duplicates_skipped": 73,
+  "mixed_images_excluded": 0,
+  "images_copied": 2105
+}

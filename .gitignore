@@ -31,3 +31,31 @@ archive/
 # Local backup copies
 *.bak
 app_before_gradcam.py
+
+# Publication safety
+app.py.backup*
+models/expanded_experiment/
+
+# Publish selected experiment reports for the app
+!reports/
+!reports/expanded_experiment/
+reports/expanded_experiment/*
+!reports/expanded_experiment/training_curves.png
+!reports/expanded_experiment/confusion_matrix.png
+!reports/expanded_experiment/classification_report.csv
+!reports/expanded_experiment/test_metrics.txt
+!reports/expanded_experiment/experiment_summary.txt
+!reports/expanded_experiment/finetune_history.csv
+!reports/expanded_experiment/training_history_export.csv
+
+# Keep only selected experiment reports in GitHub
+reports/*
+!reports/expanded_experiment/
+reports/expanded_experiment/*
+!reports/expanded_experiment/training_curves.png
+!reports/expanded_experiment/confusion_matrix.png
+!reports/expanded_experiment/classification_report.csv
+!reports/expanded_experiment/test_metrics.txt
+!reports/expanded_experiment/experiment_summary.txt
+!reports/expanded_experiment/finetune_history.csv
+!reports/expanded_experiment/training_history_export.csv

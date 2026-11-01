@@ -19,9 +19,9 @@ from tensorflow.keras import layers
 
 ROOT = Path(__file__).resolve().parents[1]
 
-DATA_DIR = ROOT / "data" / "processed_melanose100"
-MODEL_DIR = ROOT / "models" / "melanose100"
-REPORT_DIR = ROOT / "reports" / "melanose100"
+DATA_DIR = ROOT / "data" / "expanded_experiment"
+MODEL_DIR = ROOT / "models" / "expanded_experiment"
+REPORT_DIR = ROOT / "reports" / "expanded_experiment"
 
 MODEL_DIR.mkdir(parents=True, exist_ok=True)
 REPORT_DIR.mkdir(parents=True, exist_ok=True)
@@ -67,7 +67,7 @@ print("Loading training and validation datasets...")
 
 train_ds = load_dataset("train", shuffle=True)
 val_ds = load_dataset("val")
-# Test evaluation is intentionally deferred until model selection.
+test_ds = load_dataset("test")
 
 print("\nClasses:", CLASS_NAMES)
 print("Batch size:", BATCH_SIZE)
@@ -78,20 +78,10 @@ print("Fine-tuning epochs:", EPOCHS)
 # Load the existing baseline checkpoint
 # --------------------------------------------------
 
-best_baseline = MODEL_DIR / "efficientnet_b0_best.keras"
-stage1_model = MODEL_DIR / "efficientnet_b0_stage1.keras"
-
-if best_baseline.exists():
-    checkpoint = best_baseline
-elif stage1_model.exists():
-    checkpoint = stage1_model
-else:
-    raise FileNotFoundError(
-        "No saved baseline found. Expected one of:\n"
-        f"{best_baseline}\n{stage1_model}"
-    )
-
-print(f"\nLoading baseline: {checkpoint}")
+checkpoint = ROOT / "models" / "orange_disease_efficientnet_b0_final.keras"
+if not checkpoint.is_file():
+    raise FileNotFoundError(f"Production starting model not found: {checkpoint}")
+print(f"\nLoading starting model: {checkpoint}")
 
 model = keras.models.load_model(checkpoint)
 
@@ -268,5 +258,70 @@ plt.close()
 
 
 # --------------------------------------------------
-# Test-set evaluation is deferred until a model is selected.
-print("\nMelanose-only training complete. Test evaluation deferred.")
+# Final test evaluation
+# --------------------------------------------------
+
+print("\nEvaluating on the untouched test set...")
+
+test_loss, test_accuracy = model.evaluate(test_ds, verbose=1)
+
+y_true = np.concatenate([
+    labels.numpy() for _, labels in test_ds
+])
+
+probabilities = model.predict(test_ds, verbose=1)
+y_pred = np.argmax(probabilities, axis=1)
+
+report_text = classification_report(
+    y_true,
+    y_pred,
+    labels=list(range(NUM_CLASSES)),
+    target_names=CLASS_NAMES,
+    digits=4,
+    zero_division=0,
+)
+
+print("\nClassification report:")
+print(report_text)
+
+cm = confusion_matrix(
+    y_true,
+    y_pred,
+    labels=list(range(NUM_CLASSES)),
+)
+
+display = ConfusionMatrixDisplay(
+    confusion_matrix=cm,
+    display_labels=CLASS_NAMES,
+)
+
+display.plot(xticks_rotation=45, values_format="d")
+plt.title("Orange Disease Test Confusion Matrix")
+plt.tight_layout()
+plt.savefig(REPORT_DIR / "confusion_matrix.png", dpi=150)
+plt.close()
+
+with open(REPORT_DIR / "test_metrics.txt", "w", encoding="utf-8") as f:
+    f.write(f"Test loss: {test_loss:.6f}\n")
+    f.write(f"Test accuracy: {test_accuracy:.6f}\n\n")
+    f.write(report_text)
+
+pd.DataFrame(
+    classification_report(
+        y_true,
+        y_pred,
+        labels=list(range(NUM_CLASSES)),
+        target_names=CLASS_NAMES,
+        output_dict=True,
+        zero_division=0,
+    )
+).transpose().to_csv(
+    REPORT_DIR / "classification_report.csv"
+)
+
+print("\n========================================")
+print(f"Test loss:     {test_loss:.4f}")
+print(f"Test accuracy: {test_accuracy * 100:.2f}%")
+print("========================================")
+print(f"Reports saved under: {REPORT_DIR}")
+print("Fine-tuning complete.")

@@ -1,0 +1,14 @@
+Test loss: 0.106789
+Test accuracy: 0.959596
+
+              precision    recall  f1-score   support
+
+  Black_Spot     0.9474    0.9474    0.9474        19
+      Canker     0.8000    0.9231    0.8571        13
+    Greening     1.0000    1.0000    1.0000        14
+     Healthy     1.0000    0.9630    0.9811        27
+    Melanose     1.0000    0.9615    0.9804        26
+
+    accuracy                         0.9596        99
+   macro avg     0.9495    0.9590    0.9532        99
+weighted avg     0.9636    0.9596    0.9608        99

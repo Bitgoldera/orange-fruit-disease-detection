@@ -87,7 +87,137 @@ h3 {
 </style>
 """, unsafe_allow_html=True)
 
+
+# ACCESSIBILITY ALERT CONTRAST FIX
+st.markdown(
+    """
+    <style>
+    div[data-testid="stAlert"] [data-testid="stMarkdownContainer"],
+    div[data-testid="stAlert"] [data-testid="stMarkdownContainer"] *,
+    div[data-testid="stAlert"] p,
+    div[data-testid="stAlert"] li {
+        color: #352B12 !important;
+        opacity: 1 !important;
+        text-shadow: none !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 st.title("🍊 Orange Fruit Disease Detector")
+
+
+# ALERT HIGH CONTRAST OVERRIDE V2
+st.markdown(
+    """
+    <style>
+    /* Use a light background for alerts in both light and dark themes. */
+    div[data-testid="stAlert"],
+    div[data-testid="stAlert"] > div,
+    div[data-testid="stAlert"] [role="alert"] {
+        background-color: #F8FAFC !important;
+        color: #172033 !important;
+        border-color: #CBD5E1 !important;
+        opacity: 1 !important;
+        text-shadow: none !important;
+    }
+
+    /* Ensure alert text and nested Markdown remain dark and readable. */
+    div[data-testid="stAlert"] p,
+    div[data-testid="stAlert"] span,
+    div[data-testid="stAlert"] li,
+    div[data-testid="stAlert"] label,
+    div[data-testid="stAlert"] [data-testid="stMarkdownContainer"],
+    div[data-testid="stAlert"] [data-testid="stMarkdownContainer"] * {
+        color: #172033 !important;
+        opacity: 1 !important;
+        text-shadow: none !important;
+    }
+
+    div[data-testid="stAlert"] svg {
+        color: #334155 !important;
+        fill: #334155 !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+
+with st.expander("📊 Model Results & Training Curves", expanded=False):
+    from pathlib import Path as _ResultsPath
+
+    _results_dir = (
+        _ResultsPath(__file__).resolve().parent
+        / "reports" / "expanded_experiment"
+    )
+
+    st.markdown("### Model performance comparison")
+    _original_col, _expanded_col = st.columns(2)
+
+    with _original_col:
+        st.metric("Original production model", "95.96%")
+        st.caption("95/99 correct · Test loss: 0.1068 · Macro F1: 0.9532")
+
+    with _expanded_col:
+        st.metric(
+            "Expanded-data experiment",
+            "94.95%",
+            delta="-1.01 percentage points",
+        )
+        st.caption("94/99 correct · Test loss: 0.1857 · Macro F1: 0.9407")
+
+    st.info(
+        "The original model remains active for disease predictions. "
+        "The expanded-data model is experimental and has not replaced it."
+    )
+    st.caption(
+        "Both evaluations used the same 99-image test set. "
+        "These results are preliminary because the test set is small."
+    )
+
+    st.markdown("### Training curves and confusion matrix")
+    _curve_col, _matrix_col = st.columns(2)
+
+    with _curve_col:
+        _curve_file = _results_dir / "training_curves.png"
+        if _curve_file.is_file():
+            st.image(
+                str(_curve_file),
+                caption="Expanded experiment: training and validation curves",
+                use_container_width=True,
+            )
+        else:
+            st.warning("Training curves image was not found.")
+
+    with _matrix_col:
+        _matrix_file = _results_dir / "confusion_matrix.png"
+        if _matrix_file.is_file():
+            st.image(
+                str(_matrix_file),
+                caption="Expanded experiment: test confusion matrix",
+                use_container_width=True,
+            )
+        else:
+            st.warning("Confusion matrix image was not found.")
+
+    _report_file = _results_dir / "classification_report.csv"
+    if _report_file.is_file():
+        import pandas as _results_pd
+
+        st.markdown("### Class-wise test results")
+        st.dataframe(
+            _results_pd.read_csv(_report_file),
+            use_container_width=True,
+            hide_index=True,
+        )
+
+    _summary_file = _results_dir / "experiment_summary.txt"
+    if _summary_file.is_file():
+        with st.expander("View experiment summary"):
+            st.text(_summary_file.read_text(encoding="utf-8"))
+
 st.write(
     "Upload an orange fruit image to classify it using "
     "our fine-tuned EfficientNet-B0 model."

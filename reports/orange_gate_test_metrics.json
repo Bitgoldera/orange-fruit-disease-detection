@@ -1,0 +1,37 @@
+{
+  "selected_checkpoint": "fine_tuned",
+  "test_metrics_at_validation_selected_threshold": {
+    "threshold": 0.2689982056617737,
+    "accuracy": 0.99375,
+    "precision": 0.9908256880733946,
+    "recall": 1.0,
+    "specificity": 0.9807692307692307,
+    "f1": 0.9953917050691244,
+    "true_positive": 108,
+    "true_negative": 51,
+    "false_positive": 1,
+    "false_negative": 0,
+    "total": 160
+  },
+  "test_metrics_at_threshold_0_5": {
+    "threshold": 0.5,
+    "accuracy": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "specificity": 1.0,
+    "f1": 1.0,
+    "true_positive": 108,
+    "true_negative": 52,
+    "false_positive": 0,
+    "false_negative": 0,
+    "total": 160
+  },
+  "test_loss_and_keras_metrics": {
+    "accuracy": 1.0,
+    "auc": 1.0,
+    "loss": 0.009675979614257812,
+    "precision": 1.0,
+    "recall": 1.0
+  },
+  "warning": "Preliminary evaluation on a small dataset. Real-world performance on vegetables, non-fruit objects, and unfamiliar image sources has not yet been established."
+}

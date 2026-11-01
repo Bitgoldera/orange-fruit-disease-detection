@@ -1,0 +1,33 @@
+EXPANDED-DATA TRAINING EXPERIMENT
+
+Training images: 11918
+Batch size: 16
+Maximum planned epochs: 15
+Epochs completed: 12
+Best validation-loss epoch: 8
+Best validation loss: 0.23482
+Validation accuracy at best-loss epoch: 91.2088%
+
+Expanded experiment test results:
+Test accuracy: 94.95% (94/99)
+Test loss: 0.1857
+Macro precision: 0.9451
+Macro recall: 0.9388
+Macro F1: 0.9407
+Weighted F1: 0.9489
+
+Previously recorded production baseline:
+Test accuracy: 95.96% (95/99)
+Test loss: 0.106789
+Macro F1: 0.9532
+Weighted F1: 0.9608
+
+Decision:
+Keep the production model unchanged for now. The expanded experiment
+has not improved overall performance on the existing test set.
+Test-set metrics are preliminary because the test set contains only 99 images.
+
+Files:
+- training_curves.png
+- training_history_export.csv
+- finetune_history.csv
